@@ -1,0 +1,130 @@
+.page {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Locks to the source image's aspect ratio (so the % hit-areas stay
+   pixel-accurate) while filling the viewport edge-to-edge like
+   background-size:cover would. width is whichever of "fill viewport width"
+   or "fill viewport height, scaled by the image ratio" is larger - that's
+   the exact definition of cover sizing - then aspect-ratio derives height,
+   and .page's overflow:hidden clips whatever spills past the viewport. */
+.card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  aspect-ratio: 1408 / 736;
+  width: max(100vw, calc(100vh * 1.9130435));
+  background: #063a25;
+}
+
+.bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* background.png has a solid-black strip baked into its right edge (source
+   asset defect, not a layout bug) - zoom in slightly and anchor left so the
+   extra width crops the strip off the right instead of centering around it. */
+.bg-desktop {
+  background-size: 106% auto;
+  background-position: left center;
+}
+
+.bg-mobile {
+  display: none;
+}
+
+/* ---------- button hit-areas, positioned to match background.png ---------- */
+.hit {
+  position: absolute;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+}
+
+.hit:hover,
+.hit:focus-visible {
+  background: rgba(255, 255, 255, 0.18);
+  outline: none;
+}
+
+.hit-join {
+  left: 26.6%;
+  top: 27.4%;
+  width: 12.5%;
+  height: 9.7%;
+}
+
+.hit-buy {
+  left: 39.9%;
+  top: 26.5%;
+  width: 17.1%;
+  height: 12%;
+}
+
+.hit-chart {
+  left: 57.9%;
+  top: 27.4%;
+  width: 12%;
+  height: 9.7%;
+}
+
+.player {
+  position: absolute;
+  right: 2.5%;
+  bottom: 2.5%;
+  width: 30%;
+  max-width: 300px;
+  min-width: 170px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+  z-index: 10;
+}
+
+.player iframe {
+  display: block;
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  .card {
+    aspect-ratio: 720 / 1280;
+    width: max(100vw, calc(100vh * 0.5625));
+  }
+
+  .bg-desktop {
+    display: none;
+  }
+
+  .bg-mobile {
+    display: block;
+  }
+
+  .hit-join {
+    left: 4.2%;
+    top: 27.2%;
+    width: 25.7%;
+    height: 5.4%;
+  }
+
+  .hit-buy {
+    left: 33.1%;
+    top: 26.7%;
+    width: 35.3%;
+    height: 6.4%;
+  }
+
+  .hit-chart {
+    left: 70.5%;
+    top: 27.2%;
+    width: 27%;
+    height: 5.4%;
+  }
+}
