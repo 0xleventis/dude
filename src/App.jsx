@@ -10,7 +10,13 @@ export default function App() {
         <div className="bg bg-desktop" style={{ backgroundImage: `url(${bgDesktop})` }} />
         <div className="bg bg-mobile" style={{ backgroundImage: `url(${bgMobile})` }} />
 
-        <a className="hit hit-join" href="#" aria-label="Join us" rel="https://x.com/leventiscrypto" />
+        <a
+          className="hit hit-join"
+          href="https://x.com/leventiscrypto"
+          target="_blank"
+          aria-label="Join us"
+          rel="noopener noreferrer"
+        />
         <a className="hit hit-buy" href="#" aria-label="Buy $DUDES" rel="noopener noreferrer" />
         <a className="hit hit-chart" href="#" aria-label="View chart" rel="noopener noreferrer" />
 
