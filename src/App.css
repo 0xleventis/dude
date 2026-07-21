@@ -10,14 +10,21 @@
    background-size:cover would. width is whichever of "fill viewport width"
    or "fill viewport height, scaled by the image ratio" is larger - that's
    the exact definition of cover sizing - then aspect-ratio derives height,
-   and .page's overflow:hidden clips whatever spills past the viewport. */
+   and .page's overflow:hidden clips whatever spills past the viewport.
+
+   The ratio here is 1345/736, not the image's true 1408/736: background.png
+   has a solid-black strip baked into its right ~63px (source asset defect).
+   Using a narrower box ratio than the image means background-size:cover
+   binds on height (no vertical crop, faces stay uncropped) and only
+   overflows horizontally, which background-position:left then crops away
+   entirely on the right side, right where the black strip is. */
 .card {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  aspect-ratio: 1408 / 736;
-  width: max(100vw, calc(100vh * 1.9130435));
+  aspect-ratio: 1345 / 736;
+  width: max(100vw, calc(100vh * 1.8274457));
   background: #063a25;
 }
 
@@ -29,11 +36,7 @@
   background-repeat: no-repeat;
 }
 
-/* background.png has a solid-black strip baked into its right edge (source
-   asset defect, not a layout bug) - zoom in slightly and anchor left so the
-   extra width crops the strip off the right instead of centering around it. */
 .bg-desktop {
-  background-size: 106% auto;
   background-position: left center;
 }
 
@@ -55,37 +58,36 @@
 }
 
 .hit-join {
-  left: 26.6%;
+  left: 27.85%;
   top: 27.4%;
-  width: 12.5%;
+  width: 13.09%;
   height: 9.7%;
 }
 
 .hit-buy {
-  left: 39.9%;
+  left: 41.77%;
   top: 26.5%;
-  width: 17.1%;
+  width: 17.9%;
   height: 12%;
 }
 
 .hit-chart {
-  left: 57.9%;
+  left: 60.61%;
   top: 27.4%;
-  width: 12%;
+  width: 12.56%;
   height: 9.7%;
 }
 
+/* Kept fully in the layout (not display:none/visibility:hidden) and just
+   pushed off-screen, since some browsers pause/throttle media in elements
+   that are hidden via display or visibility rather than just positioned
+   off the visible canvas. */
 .player {
-  position: absolute;
-  right: 2.5%;
-  bottom: 2.5%;
-  width: 30%;
-  max-width: 300px;
-  min-width: 170px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
-  z-index: 10;
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 300px;
+  height: 152px;
 }
 
 .player iframe {

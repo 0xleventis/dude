@@ -26,10 +26,12 @@ function loadSpotifyIframeApi() {
 }
 
 // Browsers block real audio autoplay until the visitor interacts with the
-// page, and forcing controller.play() without a genuine user gesture makes
-// Spotify show its own "Get Spotify" upsell card instead of playing - so we
-// don't call play() at all. The widget renders its native play button and
-// the visitor starts it themselves.
+// page - no amount of JS overrides that. We attempt play() the moment the
+// controller is ready (works in the rare contexts that already allow it)
+// and again on the very first click/keydown anywhere on the page, so
+// playback starts as close to "on arrival" as the browser will permit. The
+// widget itself is visually hidden (see .player in App.css) so its own
+// "Get Spotify" upsell card, if it ever shows, is never seen.
 export default function SpotifyPlayer() {
   const mountRef = useRef(null);
 
@@ -39,7 +41,20 @@ export default function SpotifyPlayer() {
     loadSpotifyIframeApi().then((IFrameAPI) => {
       if (cancelled || !mountRef.current || mountRef.current.dataset.mounted) return;
       mountRef.current.dataset.mounted = "true";
-      IFrameAPI.createController(mountRef.current, { uri: TRACK_URI, width: "100%", height: "152" }, () => {});
+      IFrameAPI.createController(
+        mountRef.current,
+        { uri: TRACK_URI, width: "100%", height: "152" },
+        (controller) => {
+          controller.play();
+          const tryPlay = () => {
+            controller.play();
+            document.removeEventListener("click", tryPlay);
+            document.removeEventListener("keydown", tryPlay);
+          };
+          document.addEventListener("click", tryPlay, { once: true });
+          document.addEventListener("keydown", tryPlay, { once: true });
+        }
+      );
     });
 
     return () => {
